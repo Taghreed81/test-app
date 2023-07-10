@@ -18,16 +18,17 @@ export class UserService {
     return this.usersRepository.save(newUser);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
   findAll(): Promise<User[]> {
     return this.usersRepository.find();
   }
 
   findOne(id: number): Promise<User | null> {
     return this.usersRepository.findOneBy({ id });
+  }
+
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id);
+    return this.usersRepository.save({...user, ...updateUserDto});
   }
 
   async remove(id: number): Promise<void> {

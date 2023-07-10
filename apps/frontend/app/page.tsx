@@ -16,7 +16,7 @@ export default async function Index() {
    * Note: The corresponding styles are in the ./index.scss file.
    */
   const data = await getData()
-  console.log('hello',data);
+  console.log('hello',data.message);
   
   return (
     <div className={styles.page}>
