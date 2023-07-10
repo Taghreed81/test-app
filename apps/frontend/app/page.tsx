@@ -1,3 +1,4 @@
+import Label from '../components/label/label';
 import styles from './page.module.scss';
 
 async function getData() {
@@ -16,17 +17,17 @@ export default async function Index() {
    * Note: The corresponding styles are in the ./index.scss file.
    */
   const data = await getData()
-  console.log('hello',data.message);
   
   return (
     <div className={styles.page}>
       <div className="wrapper">
         <div className="container">
           <div id="welcome">
-            <h1>
+            {/* <h1>
               <span> Hello there,</span>
               Welcome frontend 👋
-            </h1>
+            </h1> */}
+            <Label data={data}/>
           </div>
         </div>
       </div>
