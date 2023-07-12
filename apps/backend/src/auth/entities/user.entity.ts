@@ -1,27 +1,22 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Role } from './role.enum';
 
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
-  
-    @Column()
-    firstName: string;
-  
-    @Column()
-    lastName: string;
 
     @Column()
     userName: string
 
-    @Column()
+    @Column({unique: true})
     email: string;
   
     @Column()
     password: string;
 
-    // @Column({ default: true })
-    // isActive: boolean;
+    @Column({type: 'enum', enum: Role,array: true, default: [Role.ADMIN]})
+    role: Role[]
 
 }
 

@@ -1,0 +1,25 @@
+import {
+  Controller,
+  Post,
+  Body,
+} from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { User } from './entities/user.entity';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { loginUserDto } from './dto/login-user.dto';
+
+@Controller('auth')
+export class AuthController {
+  constructor(private authService: AuthService) {}
+
+  @Post('register')
+  register(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.authService.register(createUserDto);
+  }
+
+  @Post('login')
+  login(@Body() loginUserDto: loginUserDto) {
+    return this.authService.login(loginUserDto);
+  }
+
+}

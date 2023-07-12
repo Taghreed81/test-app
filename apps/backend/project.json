@@ -58,6 +58,13 @@
           "codeCoverage": true
         }
       }
+    },
+    "": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "npm install bcrypt"
+      }
     }
   },
   "tags": []

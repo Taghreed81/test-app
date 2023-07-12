@@ -1,24 +1,9 @@
-import { Transform } from "class-transformer";
-import { IsEmail, IsString, Length, MinLength } from "class-validator";
+import { IsNotEmpty, IsString, Length } from "class-validator";
+import { loginUserDto } from "../../auth/dto/login-user.dto";
 
-export class CreateUserDto {
-
-     @IsString()
-     @Length(4, 10)
-     firstName: string;
-
-     @IsString()
-     @Length(4, 10)
-     lastName: string;
-
+export class CreateUserDto extends loginUserDto {
+     @Length(3, 10)
+     @IsNotEmpty({message: 'Name can not be null.'})
      @IsString()
      userName: string;
-
-     @IsEmail()
-     email: string;
-
-     @IsString()
-     @MinLength(8, { message: 'Password must be at least 8 characters long' })
-     @Transform(({ value }) => value.trim()) // Optional: Trim whitespace from the input
-     password: string;
 }
