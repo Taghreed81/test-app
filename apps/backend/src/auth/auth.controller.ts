@@ -4,7 +4,7 @@ import {
   Body,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { User } from './entities/user.entity';
+import { User } from '../user/entities/user.entity';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { loginUserDto } from './dto/login-user.dto';
 
