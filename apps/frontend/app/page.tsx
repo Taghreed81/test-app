@@ -1,5 +1,4 @@
-import Label from '../components/label/label';
-import styles from './page.module.scss';
+import './page.module.scss';
 
 async function getData() {
   const res = await fetch('http://localhost:3000/api')
@@ -19,16 +18,11 @@ export default async function Index() {
   const data = await getData()
   
   return (
-    <div className={styles.page}>
-      <div className="wrapper">
-        <div className="container">
-          <div id="welcome">
-            {/* <h1>
-              <span> Hello there,</span>
-              Welcome frontend 👋
-            </h1> */}
-            <Label data={data}/>
-          </div>
+    <div  className="bg-gray-50">
+      <div>
+        <div >
+            
+            {/* <Label data={data}/> */}
         </div>
       </div>
     </div>

@@ -7,6 +7,8 @@ import { UserModule } from '../user/user.module';
 import { DataSource } from 'typeorm';
 import { AuthModule } from '../auth/auth.module';
 import { ProductsModule } from '../products/products.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { storage } from '../file-upload.utils'
 
 @Module({
   imports: [
@@ -22,7 +24,8 @@ import { ProductsModule } from '../products/products.module';
     }),
     UserModule,
     AuthModule,
-    ProductsModule
+    ProductsModule,
+    MulterModule.register({ storage }),
   ],
   controllers: [AppController],
   providers: [AppService],
