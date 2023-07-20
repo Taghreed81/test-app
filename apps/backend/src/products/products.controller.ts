@@ -7,14 +7,13 @@ import {
   Param,
   Delete,
   UseGuards,
-  Request,
   UseInterceptors,
   UploadedFile,
   BadRequestException,
   Req,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { CreateProductDto } from '@backend/dtos';
+import { CreateProductDto } from '@test-app/dtos';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Roles } from '../auth/roles.decorator';
 import { JWTAuthGuard } from '../auth/jwt-guard.auth';
@@ -22,8 +21,16 @@ import { RolesGuard } from '../auth/roles.guard';
 import { Role } from '../auth/entities/role.enum';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { Product } from './entities/product.entity';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { storage } from '../file-upload.utils';
+import { FileInterceptor} from '@nestjs/platform-express';
+// import { storage } from '../file-upload.utils';
+// import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
+import {ref, uploadString, getDownloadURL, getStorage} from "firebase/storage";
+import multer from 'multer';
+
+
+// const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
 
 
 export const uploadFile = (fileName: string = 'file'): MethodDecorator => (
@@ -44,8 +51,9 @@ export const uploadFile = (fileName: string = 'file'): MethodDecorator => (
   })(target, propertyKey, descriptor);
 };
 
-let fileName ; 
+let fileName ;
 
+// const storage = getStorage(); 
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
@@ -55,31 +63,31 @@ export class ProductsController {
 
   // @Roles(Role.ADMIN)
   // @UseGuards(JWTAuthGuard, RolesGuard)
-  @Post('/upload')
-  @ApiConsumes('multipart/form-data')
-  // @uploadFile('image')
-  @UseInterceptors(
-    FileInterceptor('image', storage),
-  )
- async uploadFile( @Req() req: any, @UploadedFile() file: Express.Multer.File) {
-    if (!file || req.fileValidationError) {
-       throw new BadRequestException('invalid file provided, [image files allowed]');
-     }
-    fileName = file.originalname;
-    return fileName;
+//   @Post('/upload')
+//   @ApiConsumes('multipart/form-data')
+//   // @uploadFile('image')
+//   @UseInterceptors(
+//     FileInterceptor('image', storage), 
+//   )
+//  async uploadFile( @Req() req: any, @UploadedFile() file: Express.Multer.File) {
+//     if (!file || req.fileValidationError) {
+//        throw new BadRequestException('invalid file provided, [image files allowed]');
+//      }
+//     fileName = file.originalname;
+//     return fileName;
     
-    // return await this.productsService.create(fileName,createProductDto, req.user);
-  }
+//     // return await this.productsService.create(fileName,createProductDto, req.user);
+//   }
 
 
 
-  @Post()
-  @UseInterceptors(
-    FileInterceptor('image', storage))
-    async create(@Req() req: any,@UploadedFile() file: Express.Multer.File,@Body() createProductDto: CreateProductDto) {
-      // console.log(file)
-      // createProductDto.images = [file.fieldname];
-        return await this.productsService.create(file, req.user, createProductDto);
+  @Post('add')
+  // @UseInterceptors(
+  //   FileInterceptor('image', storage))
+    async create(@Req() req: any,@Body() createProductDto: CreateProductDto) {
+      console.log(req.user)
+      // createProductDto.image = file.fieldname;
+        return await this.productsService.create( req.user, createProductDto);
   } 
 
   @Get('all')

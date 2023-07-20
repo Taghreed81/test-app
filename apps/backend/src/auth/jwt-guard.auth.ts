@@ -25,6 +25,7 @@ import {
         const payload = await this.jwtService.verify(token, {
           secret: JWT_SECRET,
         });
+        
         request['user'] = payload;
       } catch (err) {        
         throw new HttpException(err, 401);

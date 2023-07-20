@@ -20,8 +20,7 @@ export default async function Index() {
   return (
     <div  className="bg-gray-50">
       <div>
-        <div >
-            
+        <div >            
             {/* <Label data={data}/> */}
         </div>
       </div>

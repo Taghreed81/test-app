@@ -15,9 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@backend/crud-service": ["libs/crud-service/src/index.ts"],
-      "@backend/data-access": ["libs/data-access/src/index.ts"],
-      "@backend/dtos": ["libs/dtos/src/index.ts"]
+      "@test-app/crud-service": ["libs/crud-service/src/index.ts"],
+      "@test-app/data-access": ["libs/data-access/src/index.ts"],
+      "@test-app/dtos": ["libs/dtos/src/index.ts"],
+      "@test-app/firebase": ["libs/firebase/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

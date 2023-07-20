@@ -1,35 +1,35 @@
 'use client'
-import Link from 'next/link';
 import { useState } from 'react';
+import { CreateUserDto } from '@test-app/dtos';
+
 
 /* eslint-disable-next-line */
 // export interface RegisterProps {}
 
+type CreateUserFE = CreateUserDto | {
+  userName:''
+  email:'',
+  password:'',
+ 
+}
+
 export default function Register() {
-    const [userName, setUserName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+
+  const initialValues:CreateUserFE={
+    userName:'',
+    email:'',
+    password:'',
+}
+
+  const [user, setUser] = useState<CreateUserFE>(initialValues)
   
-    const handleNameChange = (e: any) => {
-        setUserName(e.target.value);
-    };
-  
-    const handleEmailChange = (e: any) => {
-      setEmail(e.target.value);
-    };
-  
-    const handlePasswordChange = (e: any) => {
-      setPassword(e.target.value);
-    };
+    const handleUpdate = (e: any) => {    
+      setUser({ ...user, [e.target.name]: e.target.value});
+  }
   
     const handleSubmit = async (e: any) => {
       e.preventDefault();
-      const user = {
-        userName,
-        email,
-        password
-      };
-      
+     
     try {
       const response = await fetch('http://localhost:3000/api/auth/register', {
         method: 'POST',
@@ -61,8 +61,9 @@ export default function Register() {
             id="name"
             type="text"
             placeholder="Enter your name"
-            value={userName}
-            onChange={handleNameChange}
+            name="userName"
+            value={user.userName}
+            onChange={handleUpdate}
             required
           />
         </div>
@@ -75,8 +76,9 @@ export default function Register() {
             id="email"
             type="email"
             placeholder="Enter your email"
-            value={email}
-            onChange={handleEmailChange}
+            name="email"
+            value={user.email}
+            onChange={handleUpdate}
             required
           />
         </div>
@@ -89,8 +91,9 @@ export default function Register() {
             id="password"
             type="password"
             placeholder="Enter your password"
-            value={password}
-            onChange={handlePasswordChange}
+            name="password"
+            value={user.password}
+            onChange={handleUpdate}
             required
           />
         </div>

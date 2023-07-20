@@ -9,7 +9,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from '@backend/dtos';
+import { CreateUserDto } from '@test-app/dtos';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from '../auth/roles.decorator';
 import { Role } from '../auth/entities/role.enum';

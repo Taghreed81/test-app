@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { User } from '../user/entities/user.entity';
-import { CreateUserDto } from '@backend/dtos';
-import { loginUserDto } from '@backend/dtos';
+import { CreateUserDto } from '@test-app/dtos';
+import { loginUserDto } from '@test-app/dtos';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('auth')

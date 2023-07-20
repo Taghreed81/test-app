@@ -12,7 +12,16 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
-};
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+        port: '',
+        // pathname: '/account123/**',
+      },
+    ],
+  },};
 
 const plugins = [
   // Add more Next.js plugins to this list if needed.

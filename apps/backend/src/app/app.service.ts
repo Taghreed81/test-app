@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { dataAccess } from '@backend/data-access';
+import { dataAccess } from '@test-app/data-access';
 
 @Injectable()
 export class AppService {

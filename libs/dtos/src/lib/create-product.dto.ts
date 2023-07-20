@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsNotEmpty, IsNumber, IsString, isNotEmpty } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class CreateProductDto {
     @ApiProperty()
@@ -18,7 +18,7 @@ export class CreateProductDto {
 
     @ApiProperty()
     @IsNotEmpty({ message: 'Image can not be Empty.' })
-    @IsArray({ message: 'Image can should be in array format.' })
-    images!: string[];
+    @IsArray({ message: 'Image should be in string format.' })
+    imageUrl!: string;
 
 }

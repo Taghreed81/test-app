@@ -18,11 +18,11 @@ export class Product {
     description: string;
 
     @ApiProperty()
-    @Column()
+    @Column({nullable: false})
     price: number;
 
     @ApiProperty()
-    @Column({ type: 'json', nullable: true })
+    @Column({ nullable: true })
     imageUrl: string;
 
     @ManyToOne(() => User, (user) => user.products)

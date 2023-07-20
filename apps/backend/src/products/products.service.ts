@@ -1,12 +1,11 @@
 import { Body, Injectable, NotFoundException} from '@nestjs/common';
-import { CreateProductDto } from '@backend/dtos';
+import { CreateProductDto } from '@test-app/dtos';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
-// import { crudService } from '@backend/crud-service';
-
+// import { crudService } from '@test-app/crud-service';
 
 
 @Injectable()
@@ -17,11 +16,12 @@ export class ProductsService {
 ) { }
 
 
-  async create( file, user: User, @Body() createProductDto: CreateProductDto,): Promise<Product> {
+  async create(  user: User, @Body() createProductDto: CreateProductDto,): Promise<Product> {
     const newProduct = await this.productsRepository.create(createProductDto);
- console.log(createProductDto, file)
+    // console.log(createProductDto, 'hello')
+    console.log(newProduct.user, 'backend' );
     newProduct.user = user;
-    // newProduct.imageUrl = file;
+    // newProduct.imageUrl = 'file';
     return await this.productsRepository.save(newProduct); 
    }
 

@@ -25,18 +25,22 @@ export default function Register() {
         password
       };
       
+      
     try {
       const response = await fetch('http://localhost:3000/api/auth/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json',         
         },
         body: JSON.stringify(user)
       });
 
       if (response.ok) {
+        let token = await response.json();
+        localStorage.setItem("access_token", 'Bearer ' + token);
+
         console.log('User login successfully');
-        router.push('/profile');
+        // router.push('/products');
       } else {
         console.log('Registration failed');
       }

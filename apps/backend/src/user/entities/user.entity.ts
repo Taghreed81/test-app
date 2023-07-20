@@ -26,6 +26,7 @@ export class User {
     role: Role[]
 
     @OneToMany(() => Product, (product) => product.user)
+    @JoinColumn()
     products: Product[]
     
 
