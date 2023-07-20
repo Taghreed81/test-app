@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { CreateProductDto } from '@test-app/dtos';
 import { initializeApp } from "firebase/app";
 import { getAnalytics,  isSupported } from "firebase/analytics";
@@ -25,77 +25,16 @@ export default function AddProduct () {
         price:0,
         imageUrl:'',
     }
+
   const [form, setForm] = useState<CreateProductFE>(initialValues)
+  let binaryData: any =[];
+  binaryData.push(form.imageUrl)
+  const blob = new Blob(binaryData)
+
 
   const storage = getStorage(app);
 
-  useEffect(() => {
-    const uploadFile = () => {
-      const name = new Date().getTime() + form.imageUrl;
-
-      const storageRef = ref(storage, name);
-      const uploadTask = uploadBytesResumable(storageRef, form.imageUrl);
-
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-            default:
-              break;
-          }
-        },
-        (error) => {
-          console.log(error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
-          });
-        }
-      );
-    };
-    form.imageUrl && uploadFile();
-  }, [form.imageUrl]);
-
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-
-    form.price = Number(form.price);
-    fetch('http://localhost:3000/api/products/add', {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer' + localStorage.getItem('access_token'),
-        'Content-Type': 'application/json',
-},
-    body: JSON.stringify(form)
-    })
-      .then((response) => response.json())
-      .then((data) => {
-
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  let binaryData =[];
-  binaryData.push(form.imageUrl)
-
-
-  const handleUpdate = (e: any) => {  
- 
+  const uploadFile = (e: ChangeEvent<any>) => {
     const { name, value, files } = e.target;
     if (name === 'imageUrl') {
       setForm((form) => ({
@@ -108,6 +47,84 @@ export default function AddProduct () {
         [name]: value,
       }));
     }
+    const url = new Date().getTime() + form.imageUrl;
+
+    const storageRef = ref(storage, url);
+   
+
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+          default:
+            break;
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log('File available at', downloadURL);
+          setForm((form) =>({...form, imageUrl: downloadURL}))
+
+        });
+      }
+    );
+  };
+
+  const token = localStorage.getItem("access_token");
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    form.price = Number(form.price);
+    JSON.stringify(form.imageUrl)
+
+    fetch('http://localhost:3000/api/products/add', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+},
+    body: JSON.stringify(form)
+    })
+      .then((response) => response.json())
+      .then((data) => {
+
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };  
+
+
+  const handleUpdate = (e: any) => {  
+    const { name, value, files } = e.target;
+    if (name === 'imageUrl') {
+      setForm((form) => ({
+        ...form,
+        imageUrl: files[0],
+      }));
+    } else {
+      setForm((form) => ({
+        ...form,
+        [name]: value,
+      }));
+    }
+    
 }
 
   return (
@@ -122,6 +139,7 @@ export default function AddProduct () {
             type="text"
             id="title"
             name="title"
+            required
             value={form.title}
             onChange={handleUpdate}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -134,6 +152,7 @@ export default function AddProduct () {
           <textarea
             id="description"
             name="description"
+            required
             value={form.description}
             onChange={handleUpdate}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -147,6 +166,7 @@ export default function AddProduct () {
             type="text"
             id="price"
             name="price"
+            required
             value={form.price}
             onChange={handleUpdate}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -170,15 +190,15 @@ export default function AddProduct () {
             type="file"
             id="imageUrl"
             name="imageUrl"
-            onChange={handleUpdate}
+            required
+            onChange={uploadFile}
             className="focus:outline-none"
           />
 
         </div>
         <button
-
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
+          className="px-4 py-2 mb-8 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
         >
           Add Product
         </button>

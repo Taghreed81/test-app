@@ -18,7 +18,7 @@ export class CreateProductDto {
 
     @ApiProperty()
     @IsNotEmpty({ message: 'Image can not be Empty.' })
-    @IsArray({ message: 'Image should be in string format.' })
+    @IsString({ message: 'Image should be in string format.' })
     imageUrl!: string;
 
 }

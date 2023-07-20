@@ -16,12 +16,9 @@ export class ProductsService {
 ) { }
 
 
-  async create(  user: User, @Body() createProductDto: CreateProductDto,): Promise<Product> {
+  async create( user: User, @Body() createProductDto: CreateProductDto,): Promise<Product> {
     const newProduct = await this.productsRepository.create(createProductDto);
-    // console.log(createProductDto, 'hello')
-    console.log(newProduct.user, 'backend' );
     newProduct.user = user;
-    // newProduct.imageUrl = 'file';
     return await this.productsRepository.save(newProduct); 
    }
 

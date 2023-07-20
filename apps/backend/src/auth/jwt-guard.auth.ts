@@ -27,6 +27,7 @@ import {
         });
         
         request['user'] = payload;
+        console.log(payload, 'payload')
       } catch (err) {        
         throw new HttpException(err, 401);
       }

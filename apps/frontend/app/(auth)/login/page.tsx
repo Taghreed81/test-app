@@ -37,7 +37,7 @@ export default function Register() {
 
       if (response.ok) {
         let token = await response.json();
-        localStorage.setItem("access_token", 'Bearer ' + token);
+        localStorage.setItem("access_token",token.access_token);
 
         console.log('User login successfully');
         // router.push('/products');
