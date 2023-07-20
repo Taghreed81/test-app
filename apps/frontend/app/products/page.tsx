@@ -5,7 +5,7 @@ import ProductsList from "../../components/productsList"
 import Link from 'next/link';
 
 export default function Products() {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -19,8 +19,7 @@ export default function Products() {
         },
       });
       if (response.ok) {
-        const products = await response.json();
-
+        const products: [] = await response.json();
         setData(products);
       } else {
         console.error('Error:', response.status);
