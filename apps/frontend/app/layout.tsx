@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className='mx-32'>
         <Nav/>
         {children}
         </body>

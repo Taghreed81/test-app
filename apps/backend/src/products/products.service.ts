@@ -41,14 +41,4 @@ export class ProductsService {
     return await this.productsRepository.delete({id});
   }
 
-  // async addImagesToProduct(file: Express.Multer.File, id: string, email: string) {
-    // const product = await this.productsRepository.findOne(productId);
-
-    // if (!product) {
-    //   throw new Error('Product not found');
-    // }
-    // product.images = [...product.images, ...images];
-    // return this.productsRepository.save(product);
-  // }
-
 }

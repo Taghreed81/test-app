@@ -15,8 +15,9 @@ export default function Products() {
     try {
       const response = await fetch('http://localhost:3000/api/products/all', {
         headers: {
-                  Authorization: 'Bearer' + localStorage.getItem('access_token')
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
+        cache: 'no-store',
       });
       if (response.ok) {
         const products: [] = await response.json();

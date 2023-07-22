@@ -5,6 +5,8 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics,  isSupported } from "firebase/analytics";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firebaseConfig} from './firebase';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const app = initializeApp(firebaseConfig);
 const analytics = isSupported().then(yes => yes ? getAnalytics(app) : null);
@@ -27,32 +29,19 @@ export default function AddProduct () {
     }
 
   const [form, setForm] = useState<CreateProductFE>(initialValues)
-  let binaryData: any =[];
-  binaryData.push(form.imageUrl)
-  const blob = new Blob(binaryData)
+  const [file, setFile] = useState("");
+  const router = useRouter();
 
 
   const storage = getStorage(app);
 
-  const uploadFile = (e: ChangeEvent<any>) => {
-    const { name, value, files } = e.target;
-    if (name === 'imageUrl') {
-      setForm((form) => ({
-        ...form,
-        imageUrl: files[0],
-      }));
-    } else {
-      setForm((form) => ({
-        ...form,
-        [name]: value,
-      }));
-    }
-    const url = new Date().getTime() + form.imageUrl;
+  useEffect(() => {
+  const uploadFile = () => {
+    const name = new Date().getTime() + file.name;
 
-    const storageRef = ref(storage, url);
-   
-
-    const uploadTask = uploadBytesResumable(storageRef, blob);
+    console.log(name);
+    const storageRef = ref(storage, file.name);
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
       "state_changed",
@@ -84,8 +73,9 @@ export default function AddProduct () {
       }
     );
   };
+  file && uploadFile();
+}, [file]);
 
-  const token = localStorage.getItem("access_token");
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -95,15 +85,15 @@ export default function AddProduct () {
     fetch('http://localhost:3000/api/products/add', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         'Content-Type': 'application/json',
 },
     body: JSON.stringify(form)
     })
       .then((response) => response.json())
       .then((data) => {
+        router.push('/products')
 
-        console.log(data);
       })
       .catch((error) => {
         console.error(error);
@@ -112,19 +102,11 @@ export default function AddProduct () {
 
 
   const handleUpdate = (e: any) => {  
-    const { name, value, files } = e.target;
-    if (name === 'imageUrl') {
-      setForm((form) => ({
-        ...form,
-        imageUrl: files[0],
-      }));
-    } else {
+    const { name, value } = e.target;
       setForm((form) => ({
         ...form,
         [name]: value,
-      }));
-    }
-    
+      }));    
 }
 
   return (
@@ -175,11 +157,12 @@ export default function AddProduct () {
         <div className="mb-4">
         <div className="left">
             <img
-              src={
-                form.imageUrl
-                  ? URL.createObjectURL(new Blob(binaryData, {type: "application/zip"}))
+               src={
+                file
+                  ? URL.createObjectURL(file)
                   : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
               }
+             
               alt=""
             />
           </div>
@@ -191,7 +174,7 @@ export default function AddProduct () {
             id="imageUrl"
             name="imageUrl"
             required
-            onChange={uploadFile}
+            onChange={(e: any) => setFile(e.target.files[0])}
             className="focus:outline-none"
           />
 

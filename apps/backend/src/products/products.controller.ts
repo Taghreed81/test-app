@@ -17,7 +17,7 @@ import { Roles } from '../auth/roles.decorator';
 import { JWTAuthGuard } from '../auth/jwt-guard.auth';
 import { RolesGuard } from '../auth/roles.guard';
 import { Role } from '../auth/entities/role.enum';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { Product } from './entities/product.entity';
 
 @ApiTags('products')
@@ -47,6 +47,8 @@ export class ProductsController {
   @UseGuards(JWTAuthGuard, RolesGuard)
   @Patch('update/:id')
   async update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto): Promise<Product> {
+    console.log('id' + id, updateProductDto)
+
     return await this.productsService.update(+id, updateProductDto);
   }
 
@@ -56,13 +58,6 @@ export class ProductsController {
   async remove(@Param('id') id: string) {
     return await this.productsService.remove(+id);
   }
-
-   //get images from  desktop
-  //add it to the product when it get create
-  // @Get('/home/taghreed/Images')
-  // getImage() {
-
-  // }
  
 
 }
